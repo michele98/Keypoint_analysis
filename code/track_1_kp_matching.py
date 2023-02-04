@@ -13,7 +13,7 @@ def get_ap(df, label_column, top_percentile=0.5):
     df = df.sort_values('score', ascending=False).head(top)
     # after selecting top percentile candidates, we set the score for the dummy kp to 1, to prevent it from increasing the precision.
     df.loc[df['key_point_id'] == "dummy_id", 'score'] = 0.99
-    ap = average_precision_score(y_true=df[label_column], y_score=df["score"])
+    ap = average_precision_score(y_true=np.array(df[label_column]), y_score=np.array(df["score"], dtype=np.float32))
     # multiply by the number of positives in top 50% and devide by the number of max positives within the top 50%, which is the number of top 50% instances
     positives_in_top_predictions = sum(df[label_column])
     max_num_of_positives = len(df)
